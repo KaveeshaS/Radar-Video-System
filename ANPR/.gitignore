@@ -1,0 +1,9 @@
+/.ipynb_checkpoints
+/ipynb_checkpoints
+.ipynb_checkpoints
+1. Image Collection.ipynb
+2. Training and Detection.ipynb
+Error Guide.md
+/anprsys
+/Tensorflow/workspace/annotations/train.record
+/Tensorflow/workspace/annotations/test.record
