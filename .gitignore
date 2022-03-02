@@ -1,0 +1,11 @@
+/.idea
+/ANPR/.ipynb_checkpoints
+/ANPR/1. Image Collection.ipynb
+/ANPR/2. Training and Detection.ipynb
+/ANPR/Error Guide.md
+/ANPR/anprsys
+/ANPR/__pycache__
+/ANPR/Detection_Images
+/ANPR/realtimeresults.csv
+/ANPR/Tensorflow/workspace/annotations/train.record
+/ANPR/Tensorflow/workspace/annotations/test.record
