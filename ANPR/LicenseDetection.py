@@ -112,6 +112,7 @@ def save_results(text, region, csv_filename, folder_path):
 
     fileName = current_time + "-" + uuid
 
+
     img_name = '{}.jpg'.format(fileName)
 
     cv2.imwrite(os.path.join(folder_path, img_name), region)
