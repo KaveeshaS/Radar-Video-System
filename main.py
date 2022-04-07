@@ -124,11 +124,11 @@ def main():
     interpreter.allocate_tensors()
     _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
-    cap = cv2.VideoCapture(cv2.CAP_V4L2)
+    cap = cv2.VideoCapture(0)
     while cap.isOpened():
         ret, frame = cap.read()
-        img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
-        res = detect_objects(interpreter, img, 0.8)
+        #img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
+        res = detect_objects(interpreter, frame, 0.8)
         print(res)
 
         for result in res:
