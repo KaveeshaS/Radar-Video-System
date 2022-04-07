@@ -125,13 +125,6 @@ def main():
         img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
         res = detect_objects(interpreter, img, 0.8)
 
-        try:
-            text, region = ocr_it(img, res, detection_threshold, region_threshold)
-            save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
-        except:
-            pass
-
-        '''
         print(res)
         for result in res:
         
@@ -145,12 +138,18 @@ def main():
             cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
+            try:
+                text, region = ocr_it(img, res, detection_threshold, region_threshold)
+                save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
+            except:
+                pass
+
         cv2.imshow('Jetson Feed', frame)
 
         if cv2.waitKey(10) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
-        '''
+
 
 
 if __name__ == "__main__":
