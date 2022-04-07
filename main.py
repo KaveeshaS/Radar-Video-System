@@ -50,7 +50,7 @@ def detect_objects(interpreter, image, threshold):
     boxes = get_output_tensor(interpreter, 0)
     classes = get_output_tensor(interpreter, 1)
     scores = get_output_tensor(interpreter, 2)
-    count = get_output_tensor(interpreter, 3).astype(int)
+    count = np.array(get_output_tensor(interpreter, 3).astype(int))
 
     results = []
     for i in range(count):
