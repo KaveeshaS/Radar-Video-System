@@ -131,40 +131,39 @@ def main():
 
         #input_tensor = interpreter.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.float32)
         #img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
-        detections = detect_objects(interpreter, frame, 0.8)
+        #detections = detect_objects(interpreter, frame, 0.8)
 
-        detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
+        #on_classes'] = detections['detection_classes'].astype(np.int64)
 
         # For displaying bounding boxes on a camera frame
 
-        # img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
-        # res = detect_objects(interpreter, img, 0.8)
-        # print(res)
-        #
-        # for result in res:
-        #     ymin, xmin, ymax, xmax = result['detection_boxes']
-        #     xmin = int(max(1, xmin * CAMERA_WIDTH))
-        #     xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
-        #     ymin = int(max(1, ymin * CAMERA_HEIGHT))
-        #     ymax = int(min(CAMERA_HEIGHT, ymax * CAMERA_HEIGHT))
-        #
-        #     cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 3)
-        #     cv2.putText(frame, labels[int(result['detection_classes'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
-        #                 cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
-        #
-        # cv2.imshow('Jetson Feed', frame)
-        #
-        # if cv2.waitKey(10) & 0xFF == ord('q'):
-        #     cap.release()
-        #     cv2.destroyAllWindows()
+        img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
+        res = detect_objects(interpreter, img, 0.8)
+        print(res)
 
-        image_np_with_detections = image_np.copy()
+        for result in res:
+            ymin, xmin, ymax, xmax = result['detection_boxes']
+            xmin = int(max(1, xmin * CAMERA_WIDTH))
+            xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
+            ymin = int(max(1, ymin * CAMERA_HEIGHT))
+            ymax = int(min(CAMERA_HEIGHT, ymax * CAMERA_HEIGHT))
 
-        try:
-            text, region = ocr_it(image_np_with_detections, detections, detection_threshold, region_threshold)
-            save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
-        except:
-            pass
+            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 3)
+            cv2.putText(frame, labels[int(result['detection_classes'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+
+        cv2.imshow('Jetson Feed', frame)
+
+        if cv2.waitKey(10) & 0xFF == ord('q'):
+            cap.release()
+            cv2.destroyAllWindows()
+
+        # image_np_with_detections = image_np.copy()
+        # try:
+        #     text, region = ocr_it(image_np_with_detections, detections, detection_threshold, region_threshold)
+        #     save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
+        # except:
+        #     pass
 
 if __name__ == "__main__":
     main()
