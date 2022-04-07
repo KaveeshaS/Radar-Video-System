@@ -50,17 +50,23 @@ def detect_objects(interpreter, image, threshold):
     boxes = get_output_tensor(interpreter, 0)
     classes = get_output_tensor(interpreter, 1)
     scores = get_output_tensor(interpreter, 2)
-    count = np.array(get_output_tensor(interpreter, 3).astype(int))
+    #count = get_output_tensor(interpreter, 3).astype(int)
 
+    result = {
+        'detection_boxes': boxes[0],
+        'detection_classes': classes[0],
+        'detection_scores': scores[0]
+    }
     results = []
-    for i in range(count):
-        if scores[i] >= threshold:
-            result = {
-                'detection_boxes': boxes[i],
-                'detection_classes': classes[i],
-                'detection_scores': scores[i]
-            }
-            results.append(result)
+    results.append(result)
+    # for i in range(count):
+    #     if scores[i] >= threshold:
+    #         result = {
+    #             'detection_boxes': boxes[i],
+    #             'detection_classes': classes[i],
+    #             'detection_scores': scores[i]
+    #         }
+    #         results.append(result)
     return results
 
 detection_threshold = 0.7
