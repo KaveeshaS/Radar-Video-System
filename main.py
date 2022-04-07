@@ -129,14 +129,8 @@ def main():
         image_np = np.array(frame)
 
         image_np_with_detections = image_np.copy()
-        img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
-        detections = detect_objects(interpreter, img, 0.8)
-
-        try:
-            text, region = ocr_it(image_np_with_detections, detections, detection_threshold, region_threshold)
-            save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
-        except:
-            pass
+        #img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
+        detections = detect_objects(interpreter, ret, 0.8)
 
         # For displaying bounding boxes on a camera frame
 
@@ -161,6 +155,11 @@ def main():
         #     cap.release()
         #     cv2.destroyAllWindows()
 
+        try:
+            text, region = ocr_it(image_np_with_detections, detections, detection_threshold, region_threshold)
+            save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
+        except:
+            pass
 
 if __name__ == "__main__":
     main()
