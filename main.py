@@ -129,10 +129,11 @@ def main():
         ret, frame = cap.read()
         image_np = np.array(frame)
 
-        image_np_with_detections = image_np.copy()
         #input_tensor = interpreter.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.float32)
         #img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
         detections = detect_objects(interpreter, ret, 0.8)
+
+        detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
 
         # For displaying bounding boxes on a camera frame
 
@@ -156,6 +157,8 @@ def main():
         # if cv2.waitKey(10) & 0xFF == ord('q'):
         #     cap.release()
         #     cv2.destroyAllWindows()
+
+        image_np_with_detections = image_np.copy()
 
         try:
             text, region = ocr_it(image_np_with_detections, detections, detection_threshold, region_threshold)
