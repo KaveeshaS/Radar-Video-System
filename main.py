@@ -1,22 +1,13 @@
-import csv
-import os
 import re
-from datetime import datetime
-
 import cv2
-import easyocr
-# import tensorflow as tf
-import numpy as np
-import shortuuid
-from matplotlib import pyplot as plt
 from tflite_runtime.interpreter import Interpreter
+import numpy as np
 
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
 
 
 def load_labels(path='labels.txt'):
-    # Loads the labels file. Supports files with or without index numbers
     with open(path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
         labels = {}
@@ -30,21 +21,18 @@ def load_labels(path='labels.txt'):
 
 
 def set_input_tensor(interpreter, image):
-    # Sets the input tensor
     tensor_index = interpreter.get_input_details()[0]['index']
     input_tensor = interpreter.tensor(tensor_index)()[0]
     input_tensor[:, :] = np.expand_dims((image - 255) / 255, axis=0)
 
 
 def get_output_tensor(interpreter, index):
-    # Returns the output tensor at the given index
     output_details = interpreter.get_output_details()[index]
     tensor = np.squeeze(interpreter.get_tensor(output_details['index']))
     return tensor
 
 
 def detect_objects(interpreter, image, threshold):
-    """Returns a list of detection results, each a dictionary of object info."""
     set_input_tensor(interpreter, image)
     interpreter.invoke()
     # Get all output details
@@ -64,60 +52,6 @@ def detect_objects(interpreter, image, threshold):
             results.append(result)
     return results
 
-detection_threshold = 0.7
-region_threshold = 0.6
-
-def filter_text(region, ocr_result, region_threshold):
-    rectangle_size = region.shape[0] * region.shape[1]
-
-    plate = []
-    for result in ocr_result:
-        length = np.sum(np.subtract(result[0][1], result[0][0]))
-        height = np.sum(np.subtract(result[0][2], result[0][1]))
-
-        if length * height / rectangle_size > region_threshold:
-            plate.append(result[1])
-    return plate
-
-def ocr_it(image, detections, detection_threshold, region_threshold):
-    # Scores, boxes and classes above threshold
-    scores = list(filter(lambda x: x > detection_threshold, detections['detection_scores']))
-    boxes = detections['detection_boxes'][:len(scores)]
-    classes = detections['detection_classes'][:len(scores)]
-
-    # Full image dimensions
-    width = image.shape[1]
-    height = image.shape[0]
-
-    # Apply ROI filtering and OCR
-    for idx, box in enumerate(boxes):
-        roi = box * [height, width, height, width]
-        region = image[int(roi[0]):int(roi[2]), int(roi[1]):int(roi[3])]
-        reader = easyocr.Reader(['en'])
-        ocr_result = reader.readtext(region)
-
-        text = filter_text(region, ocr_result, region_threshold)
-
-        plt.imshow(cv2.cvtColor(region, cv2.COLOR_BGR2RGB))
-        plt.show()
-        return text, region
-
-def save_results(text, region, csv_filename, folder_path):
-    now = datetime.now()
-    current_time = now.strftime("%Y-%m-%d-%H-%M-%S")
-    uuid = shortuuid.uuid()
-
-    fileName = current_time + "-" + uuid
-
-
-    img_name = '{}.jpg'.format(fileName)
-
-    cv2.imwrite(os.path.join(folder_path, img_name), region)
-
-    with open(csv_filename, mode='a', newline='') as f:
-        csv_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csv_writer.writerow([img_name, text])
-
 
 def main():
     labels = load_labels()
@@ -125,7 +59,7 @@ def main():
     interpreter.allocate_tensors()
     _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
-    cap = cv2.VideoCapture(1)
+    cap = cv2.VideoCapture(0)
     while cap.isOpened():
         ret, frame = cap.read()
         img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
