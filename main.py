@@ -47,17 +47,18 @@ def detect_objects(interpreter, image, threshold):
     set_input_tensor(interpreter, image)
     interpreter.invoke()
     # Get all output details
-    boxes = get_output_tensor(interpreter, 0)
+    boxes = get_output_tensor(interpreter, 1)
     classes = get_output_tensor(interpreter, 1)
     scores = get_output_tensor(interpreter, 2)
     #count = get_output_tensor(interpreter, 3).astype(int)
 
-    result = {
-        'detection_boxes': boxes[1],
-        'detection_classes': classes[1],
-        'detection_scores': scores[1]
-    }
     results = []
+    if scores[0] >= threshold:
+        result = {
+            'detection_boxes': boxes[0],
+            'detection_classes': classes[0],
+            'detection_scores': scores[0]
+        }
     results.append(result)
     # for i in range(count):
     #     if scores[i] >= threshold:
