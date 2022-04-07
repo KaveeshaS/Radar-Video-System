@@ -1,14 +1,15 @@
-import re
-import cv2
-import os
-from tflite_runtime.interpreter import Interpreter
-#import tensorflow as tf
-import numpy as np
-from matplotlib import pyplot as plt
-import easyocr
 import csv
+import os
+import re
 from datetime import datetime
+
+import cv2
+import easyocr
+# import tensorflow as tf
+import numpy as np
 import shortuuid
+from matplotlib import pyplot as plt
+from tflite_runtime.interpreter import Interpreter
 
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
@@ -43,31 +44,24 @@ def get_output_tensor(interpreter, index):
 
 
 def detect_objects(interpreter, image, threshold):
-    # Returns a list of detection results, each a dictionary of object info
+    """Returns a list of detection results, each a dictionary of object info."""
     set_input_tensor(interpreter, image)
     interpreter.invoke()
     # Get all output details
-    boxes = get_output_tensor(interpreter, 1)
+    boxes = get_output_tensor(interpreter, 0)
     classes = get_output_tensor(interpreter, 1)
     scores = get_output_tensor(interpreter, 2)
-    #count = get_output_tensor(interpreter, 3).astype(int)
+    count = int(get_output_tensor(interpreter, 3))
 
     results = []
-    if scores[0] >= threshold:
-        result = {
-            'detection_boxes': boxes[0],
-            'detection_classes': classes[0],
-            'detection_scores': scores[0]
-        }
-    results.append(result)
-    # for i in range(count):
-    #     if scores[i] >= threshold:
-    #         result = {
-    #             'detection_boxes': boxes[i],
-    #             'detection_classes': classes[i],
-    #             'detection_scores': scores[i]
-    #         }
-    #         results.append(result)
+    for i in range(count):
+        if scores[i] >= threshold:
+            result = {
+                'bounding_box': boxes[i],
+                'class_id': classes[i],
+                'score': scores[i]
+            }
+            results.append(result)
     return results
 
 detection_threshold = 0.7
@@ -139,14 +133,14 @@ def main():
         print(res)
 
         for result in res:
-            ymin, xmin, ymax, xmax = result['detection_boxes']
+            ymin, xmin, ymax, xmax = result['bounding_box']
             xmin = int(max(1, xmin * CAMERA_WIDTH))
             xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
             ymin = int(max(1, ymin * CAMERA_HEIGHT))
             ymax = int(min(CAMERA_HEIGHT, ymax * CAMERA_HEIGHT))
 
             cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 3)
-            cv2.putText(frame, labels[int(result['detection_classes'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
+            cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
         cv2.imshow('Jetson Feed', frame)
@@ -154,6 +148,7 @@ def main():
         if cv2.waitKey(10) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     main()
