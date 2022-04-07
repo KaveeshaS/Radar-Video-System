@@ -2,7 +2,7 @@ import re
 import cv2
 import os
 from tflite_runtime.interpreter import Interpreter
-import tensorflow as tf
+#import tensorflow as tf
 import numpy as np
 from matplotlib import pyplot as plt
 import easyocr
@@ -130,9 +130,9 @@ def main():
         image_np = np.array(frame)
 
         image_np_with_detections = image_np.copy()
-        input_tensor = tf.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.float32)
-        #img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
-        detections = detect_objects(interpreter, input_tensor, 0.8)
+        #input_tensor = interpreter.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.float32)
+        img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
+        detections = detect_objects(interpreter, img, 0.8)
 
         # For displaying bounding boxes on a camera frame
 
