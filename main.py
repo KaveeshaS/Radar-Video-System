@@ -131,8 +131,8 @@ def main():
 
         image_np_with_detections = image_np.copy()
         #input_tensor = interpreter.convert_to_tensor(np.expand_dims(image_np, 0), dtype=tf.float32)
-        img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
-        detections = detect_objects(interpreter, img, 0.8)
+        #img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
+        detections = detect_objects(interpreter, ret, 0.8)
 
         # For displaying bounding boxes on a camera frame
 
