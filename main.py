@@ -59,7 +59,7 @@ def main():
     interpreter.allocate_tensors()
     _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     while cap.isOpened():
         ret, frame = cap.read()
         img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
