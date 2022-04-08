@@ -73,11 +73,12 @@ def filter_text(region, ocr_result, region_threshold):
             plate.append(result[1])
     return plate
 
+
 def ocr_it(image, detections, detection_threshold, region_threshold):
     # Scores, boxes and classes above threshold
-    scores = list(filter(lambda x: x > detection_threshold, detections['bounding_box']))
-    boxes = detections['bounding_box'][:len(scores)]
-    classes = detections['class_id'][:len(scores)]
+    scores = list(filter(lambda x: x > detection_threshold, detections[0]['bounding_box']))
+    boxes = detections[0]['bounding_box'][:len(scores)]
+    classes = detections[0]['class_id'][:len(scores)]
 
     # Full image dimensions
     width = image.shape[1]
