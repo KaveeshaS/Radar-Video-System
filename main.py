@@ -51,9 +51,9 @@ def detect_objects(interpreter, image, threshold):
     for i in range(count):
         if scores[i] >= threshold:
             result = {
-                'bounding_box': boxes[i],
-                'class_id': classes[i],
-                'score': scores[i]
+                boxes[i],
+                classes[i],
+                scores[i]
             }
             results.append(result)
     return results
@@ -128,15 +128,15 @@ def main():
         print(res)
         for result in res:
         
-            ymin, xmin, ymax, xmax = result['bounding_box']
-            xmin = int(max(1, xmin * CAMERA_WIDTH))
-            xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
-            ymin = int(max(1, ymin * CAMERA_HEIGHT))
-            ymax = int(min(CAMERA_HEIGHT, ymax * CAMERA_HEIGHT))
-
-            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 3)
-            cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+            # ymin, xmin, ymax, xmax = result['bounding_box']
+            # xmin = int(max(1, xmin * CAMERA_WIDTH))
+            # xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
+            # ymin = int(max(1, ymin * CAMERA_HEIGHT))
+            # ymax = int(min(CAMERA_HEIGHT, ymax * CAMERA_HEIGHT))
+            #
+            # cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 3)
+            # cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
+            #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
             text, region = ocr_it(img, res, detection_threshold, region_threshold)
             save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
