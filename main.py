@@ -166,10 +166,17 @@ def main():
     while cap.isOpened():
         ret, frame = cap.read()
         img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
-        res = detect_objects(interpreter, img, 0.8)
+        detections = detect_objects(interpreter, img, 0.8)
 
-        print(res)
-        for result in res:
+        num_detections = int(detections.pop('num_detections'))
+        detections = {key: value[0, :num_detections].numpy()
+                      for key, value in detections.items()}
+        detections['num_detections'] = num_detections
+
+        # detection_classes should be ints.
+        detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
+        # print(detections)
+        for result in detections:
 
             # ymin, xmin, ymax, xmax = result['bounding_box']
             # xmin = int(max(1, xmin * CAMERA_WIDTH))
@@ -181,7 +188,8 @@ def main():
             # cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
             #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
-            text, region = ocr_it(img, res, detection_threshold, region_threshold)
+
+            text, region = ocr_it(img, detections, detection_threshold, region_threshold)
             save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
 
             # try:
