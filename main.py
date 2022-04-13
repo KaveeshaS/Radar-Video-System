@@ -12,6 +12,35 @@ import os
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
 
+#--------------------------CSI CAM DEFINITION-----------------------
+
+def gstreamer_pipeline(
+    sensor_id=0,
+    capture_width=1920,
+    capture_height=1080,
+    display_width=960,
+    display_height=540,
+    framerate=30,
+    flip_method=0,
+):
+    return (
+        "nvarguscamerasrc sensor-id=%d !"
+        "video/x-raw(memory:NVMM), width=(int)%d, height=(int)%d, framerate=(fraction)%d/1 ! "
+        "nvvidconv flip-method=%d ! "
+        "video/x-raw, width=(int)%d, height=(int)%d, format=(string)BGRx ! "
+        "videoconvert ! "
+        "video/x-raw, format=(string)BGR ! appsink"
+        % (
+            sensor_id,
+            capture_width,
+            capture_height,
+            framerate,
+            flip_method,
+            display_width,
+            display_height,
+        )
+    )
+
 
 ######################################################################################
 ##########################    Object Detection Functions    ##########################
@@ -130,7 +159,9 @@ def main():
     interpreter.allocate_tensors()
     _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
-    cap = cv2.VideoCapture(0)
+    #cap = cv2.VideoCapture(0)
+    #Uncomment below for CSI stuff
+    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 
     while cap.isOpened():
         ret, frame = cap.read()
