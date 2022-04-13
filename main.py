@@ -119,7 +119,7 @@ def ocr_it(image, detections, detection_threshold, region_threshold):
     scores = list(filter(lambda x: x > detection_threshold, detections[0]['bounding_box']))
     boxes = detections[0]['bounding_box'][:len(scores)]
     #classes = detections[0]['class_id'][:len(scores)]
-
+    print(boxes)
     # Full image dimensions
     width = image.shape[1]
     height = image.shape[0]
