@@ -188,14 +188,14 @@ def main():
             # cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
             #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
-        text, region = ocr_it(img, detections, detection_threshold, region_threshold)
-        save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
+        # text, region = ocr_it(img, detections, detection_threshold, region_threshold)
+        # save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
 
-        # try:
-        #     text, region = ocr_it(img, detections, detection_threshold, region_threshold)
-        #     save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
-        # except:
-        #     pass
+        try:
+            text, region = ocr_it(img, detections, detection_threshold, region_threshold)
+            save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
+        except Exception as e:
+            print(e)
 
         cv2.imshow('Jetson Feed', frame)
 
