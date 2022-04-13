@@ -193,8 +193,9 @@ def main():
         # text, region = ocr_it(img, detections, detection_threshold, region_threshold)
         # save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
 
+        img_detect = img_sized.copy()
         try:
-            text, region = ocr_it(img_sized, detections, detection_threshold, region_threshold)
+            text, region = ocr_it(img_detect, detections, detection_threshold, region_threshold)
             save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
         except:
             print(traceback.format_exc())
