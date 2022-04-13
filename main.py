@@ -159,9 +159,9 @@ def main():
     interpreter.allocate_tensors()
     _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
-    #cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(0)
     #Uncomment below for CSI stuff
-    cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
+    #cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
 
     while cap.isOpened():
         ret, frame = cap.read()
