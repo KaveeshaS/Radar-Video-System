@@ -86,7 +86,8 @@ def detect_objects(interpreter, image, threshold):
             result = {
                 'bounding_box': boxes[i],
                 'class_id': classes[i],
-                'score': scores[i]
+                'score': scores[i],
+                'count': count[i]
             }
             results.append(result)
     return results
