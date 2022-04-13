@@ -9,6 +9,7 @@ import csv
 from datetime import datetime
 import shortuuid
 import os
+import tensorflow as tf
 
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
@@ -125,6 +126,7 @@ def ocr_it(image, detections, detection_threshold, region_threshold):
 
     # Apply ROI filtering and OCR
     for idx, box in enumerate(boxes):
+        print(box)
         roi = box * [height, width, height, width]
         region = image[int(roi[0]):int(roi[2]), int(roi[1]):int(roi[3])]
         reader = easyocr.Reader(['en'])
@@ -168,6 +170,9 @@ def main():
         ret, frame = cap.read()
         img = np.array(frame)
         img_sized = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (320, 320))
+
+
+
         detections = detect_objects(interpreter, img_sized, 0.8)
 
         # num_detections = int(detections.pop([0]['count']))
@@ -193,12 +198,13 @@ def main():
         # text, region = ocr_it(img, detections, detection_threshold, region_threshold)
         # save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
 
-        img_detect = img_sized.copy()
+        img_detect = img.copy()
         try:
             text, region = ocr_it(img_detect, detections, detection_threshold, region_threshold)
             save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
         except:
-            print(traceback.format_exc())
+            #print(traceback.format_exc())
+            pass
 
         cv2.imshow('Jetson Feed', frame)
 
