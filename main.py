@@ -167,6 +167,7 @@ def main():
     while cap.isOpened():
         ret, frame = cap.read()
         img = np.array(frame)
+        img_sized = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (320, 320))
         detections = detect_objects(interpreter, img, 0.8)
 
         # num_detections = int(detections.pop([0]['count']))
@@ -193,7 +194,7 @@ def main():
         # save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
 
         try:
-            text, region = ocr_it(img, detections, detection_threshold, region_threshold)
+            text, region = ocr_it(img_sized, detections, detection_threshold, region_threshold)
             save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
         except:
             print(traceback.format_exc())
