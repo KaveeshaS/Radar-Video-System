@@ -1,5 +1,6 @@
 import re
 import cv2
+import traceback
 from tflite_runtime.interpreter import Interpreter
 import numpy as np
 from matplotlib import pyplot as plt
@@ -194,8 +195,8 @@ def main():
         try:
             text, region = ocr_it(img, detections, detection_threshold, region_threshold)
             save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
-        except Exception as e:
-            print(e)
+        except:
+            print(traceback.format_exc())
 
         cv2.imshow('Jetson Feed', frame)
 
