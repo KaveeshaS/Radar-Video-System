@@ -30,6 +30,7 @@ def load_labels(path='labels.txt'):
     return labels
 
 
+#quick
 def set_input_tensor(interpreter, image):
     tensor_index = interpreter.get_input_details()[0]['index']
     input_tensor = interpreter.tensor(tensor_index)()[0]
