@@ -13,6 +13,10 @@ CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
 
 
+######################################################################################
+##########################    Object Detection Functions    ##########################
+######################################################################################
+
 def load_labels(path='labels.txt'):
     with open(path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
@@ -58,8 +62,13 @@ def detect_objects(interpreter, image, threshold):
             results.append(result)
     return results
 
+######################################################################################
+###############################    OCR Functions    ##################################
+######################################################################################
+
 detection_threshold = 0.7
 region_threshold = 0.6
+
 
 def filter_text(region, ocr_result, region_threshold):
     rectangle_size = region.shape[0] * region.shape[1]
@@ -78,7 +87,7 @@ def ocr_it(image, detections, detection_threshold, region_threshold):
     # Scores, boxes and classes above threshold
     scores = list(filter(lambda x: x > detection_threshold, detections[0]['bounding_box']))
     boxes = detections[0]['bounding_box'][:len(scores)]
-    #classes = detections[0]['class_id'][:len(scores)]
+    # classes = detections[0]['class_id'][:len(scores)]
 
     # Full image dimensions
     width = image.shape[1]
@@ -95,7 +104,9 @@ def ocr_it(image, detections, detection_threshold, region_threshold):
 
         plt.imshow(cv2.cvtColor(region, cv2.COLOR_BGR2RGB))
         plt.show()
+        print("Successful OCR")
         return text, region
+
 
 def save_results(text, region, csv_filename, folder_path):
     now = datetime.now()
@@ -104,7 +115,6 @@ def save_results(text, region, csv_filename, folder_path):
 
     fileName = current_time + "-" + uuid
 
-
     img_name = '{}.jpg'.format(fileName)
 
     cv2.imwrite(os.path.join(folder_path, img_name), region)
@@ -112,6 +122,7 @@ def save_results(text, region, csv_filename, folder_path):
     with open(csv_filename, mode='a', newline='') as f:
         csv_writer = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         csv_writer.writerow([img_name, text])
+
 
 def main():
     labels = load_labels()
@@ -128,7 +139,7 @@ def main():
 
         print(res)
         for result in res:
-        
+
             # ymin, xmin, ymax, xmax = result['bounding_box']
             # xmin = int(max(1, xmin * CAMERA_WIDTH))
             # xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
@@ -142,7 +153,6 @@ def main():
             # text, region = ocr_it(img, res, detection_threshold, region_threshold)
             # save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
 
-            
             try:
                 text, region = ocr_it(img, res, detection_threshold, region_threshold)
                 save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
@@ -154,7 +164,6 @@ def main():
         if cv2.waitKey(10) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
-
 
 
 if __name__ == "__main__":
