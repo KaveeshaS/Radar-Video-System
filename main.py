@@ -116,7 +116,7 @@ def ocr_it(image, detections, detection_threshold, region_threshold):
     # Scores, boxes and classes above threshold
     scores = list(filter(lambda x: x > detection_threshold, detections[0]['bounding_box']))
     boxes = detections[0]['bounding_box'][:len(scores)]
-    classes = detections[0]['class_id'][:len(scores)]
+    #classes = detections[0]['class_id'][:len(scores)]
 
     # Full image dimensions
     width = image.shape[1]
@@ -174,9 +174,9 @@ def main():
         # detections['count'] = num_detections
 
         # detection_classes should be ints.
-        detections['class_id'] = detections[0]['class_id'].astype(np.int64)
+        #detections['class_id'] = detections[0]['class_id'].astype(np.int64)
         # print(detections)
-        for result in detections:
+        #for result in detections:
 
             # ymin, xmin, ymax, xmax = result['bounding_box']
             # xmin = int(max(1, xmin * CAMERA_WIDTH))
@@ -188,9 +188,8 @@ def main():
             # cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
             #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
-
-            text, region = ocr_it(img, detections, detection_threshold, region_threshold)
-            save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
+        text, region = ocr_it(img, detections, detection_threshold, region_threshold)
+        save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
 
             # try:
             #     text, region = ocr_it(img, res, detection_threshold, region_threshold)
