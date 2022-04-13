@@ -203,8 +203,8 @@ def main():
             text, region = ocr_it(img_detect, detections, detection_threshold, region_threshold)
             save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
         except:
-            #print(traceback.format_exc())
-            pass
+            print(traceback.format_exc())
+            #pass
 
         cv2.imshow('Jetson Feed', frame)
 
