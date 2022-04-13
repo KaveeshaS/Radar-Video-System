@@ -174,7 +174,7 @@ def main():
         # detections['count'] = num_detections
 
         # detection_classes should be ints.
-        detections['class_id'] = detections['class_id'].astype(np.int64)
+        detections['class_id'] = detections[0]['class_id'].astype(np.int64)
         # print(detections)
         for result in detections:
 
