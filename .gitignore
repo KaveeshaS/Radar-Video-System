@@ -6,3 +6,4 @@
 /ANPR/realtimeresults.csv
 /ANPR/Tensorflow/workspace/annotations/train.record
 /ANPR/Tensorflow/workspace/annotations/test.record
+/ANPR/base.ipynb
