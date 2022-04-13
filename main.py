@@ -86,8 +86,7 @@ def detect_objects(interpreter, image, threshold):
             result = {
                 'bounding_box': boxes[i],
                 'class_id': classes[i],
-                'score': scores[i],
-                'count': count[i]
+                'score': scores[i]#, 'count': count[i]
             }
             results.append(result)
     return results
@@ -169,10 +168,10 @@ def main():
         img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
         detections = detect_objects(interpreter, img, 0.8)
 
-        num_detections = int(detections.pop([0]['count']))
-        detections = {key: value[0, :num_detections].numpy()
-                      for key, value in detections.items()}
-        detections['count'] = num_detections
+        # num_detections = int(detections.pop([0]['count']))
+        # detections = {key: value[0, :num_detections].numpy()
+        #               for key, value in detections.items()}
+        # detections['count'] = num_detections
 
         # detection_classes should be ints.
         detections['class_id'] = detections['class_id'].astype(np.int64)
