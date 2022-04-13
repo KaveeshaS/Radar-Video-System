@@ -114,7 +114,7 @@ def filter_text(region, ocr_result, region_threshold):
 
 def ocr_it(image, detections, detection_threshold, region_threshold):
     # Scores, boxes and classes above threshold
-    scores = list(filter(lambda x: x > detection_threshold, detections[0]['bounding_box']))
+    scores = list(filter(lambda x: x > detection_threshold, detections['bounding_box']))
     boxes = detections[0]['bounding_box'][:len(scores)]
     #classes = detections[0]['class_id'][:len(scores)]
 
@@ -175,7 +175,7 @@ def main():
 
         # detection_classes should be ints.
         #detections['class_id'] = detections[0]['class_id'].astype(np.int64)
-        # print(detections)
+        print(detections)
         #for result in detections:
 
             # ymin, xmin, ymax, xmax = result['bounding_box']
