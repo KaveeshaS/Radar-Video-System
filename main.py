@@ -9,7 +9,7 @@ import csv
 from datetime import datetime
 import shortuuid
 import os
-import tensorflow as tf
+
 
 CAMERA_WIDTH = 640
 CAMERA_HEIGHT = 480
