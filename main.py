@@ -168,7 +168,7 @@ def main():
         ret, frame = cap.read()
         img = np.array(frame)
         img_sized = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (320, 320))
-        detections = detect_objects(interpreter, img, 0.8)
+        detections = detect_objects(interpreter, img_sized, 0.8)
 
         # num_detections = int(detections.pop([0]['count']))
         # detections = {key: value[0, :num_detections].numpy()
