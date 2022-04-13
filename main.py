@@ -185,7 +185,7 @@ def main():
         print(detections)
         #for result in detections:
 
-            # ymin, xmin, ymax, xmax = result['bounding_box']
+        #ymin, xmin, ymax, xmax = detections['bounding_box']
             # xmin = int(max(1, xmin * CAMERA_WIDTH))
             # xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
             # ymin = int(max(1, ymin * CAMERA_HEIGHT))

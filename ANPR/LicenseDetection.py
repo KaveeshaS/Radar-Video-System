@@ -87,13 +87,14 @@ def ocr_it(image, detections, detection_threshold, region_threshold):
     scores = list(filter(lambda x: x > detection_threshold, detections['detection_scores']))
     boxes = detections['detection_boxes'][:len(scores)]
     classes = detections['detection_classes'][:len(scores)]
-
+    print(boxes)
     # Full image dimensions
     width = image.shape[1]
     height = image.shape[0]
 
     # Apply ROI filtering and OCR
     for idx, box in enumerate(boxes):
+        print(box)
         roi = box * [height, width, height, width]
         region = image[int(roi[0]):int(roi[2]), int(roi[1]):int(roi[3])]
         reader = easyocr.Reader(['en'])
