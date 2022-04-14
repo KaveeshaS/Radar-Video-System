@@ -129,7 +129,7 @@ def ocr_it(image, detections, detection_threshold, region_threshold):
         print(boxes)
         roi = boxes * [height, width, height, width]
         region = image[int(roi[0]):int(roi[2]), int(roi[1]):int(roi[3])]
-        reader = easyocr.Reader(['en'])
+        reader = easyocr.Reader(['en'], gpu=True)
         ocr_result = reader.readtext(region)
 
         text = filter_text(region, ocr_result, region_threshold)
