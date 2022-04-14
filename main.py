@@ -163,30 +163,14 @@ def main():
     _, input_height, input_width, _ = interpreter.get_input_details()[0]['shape']
 
     cap = cv2.VideoCapture(0)
-    #Uncomment below for CSI stuff
-    #cap = cv2.VideoCapture(gstreamer_pipeline(flip_method=0), cv2.CAP_GSTREAMER)
-
     while cap.isOpened():
         ret, frame = cap.read()
-        img = np.array(frame)
-        img_sized = cv2.resize(cv2.cvtColor(img, cv2.COLOR_BGR2RGB), (320, 320))
+        img = cv2.resize(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB), (320, 320))
+        res = detect_objects(interpreter, img, 0.8)
+        print(res)
 
-
-
-        detections = detect_objects(interpreter, img_sized, 0.8)
-
-        # num_detections = int(detections.pop([0]['count']))
-        # detections = {key: value[0, :num_detections].numpy()
-        #               for key, value in detections.items()}
-        # detections['count'] = num_detections
-
-        # detection_classes should be ints.
-        #detections['class_id'] = detections[0]['class_id'].astype(np.int64)
-
-        #print(detections)
-        for result in detections:
-
-            ymin, xmin, ymax, xmax = detections['bounding_box']
+        for result in res:
+            ymin, xmin, ymax, xmax = result['bounding_box']
             xmin = int(max(1, xmin * CAMERA_WIDTH))
             xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
             ymin = int(max(1, ymin * CAMERA_HEIGHT))
@@ -196,23 +180,11 @@ def main():
             cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
-        # text, region = ocr_it(img, detections, detection_threshold, region_threshold)
-        # save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
-
-        # img_detect = img.copy()
-        # try:
-        #     text, region = ocr_it(img_detect, detections, detection_threshold, region_threshold)
-        #     save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
-        # except:
-        #     print(traceback.format_exc())
-        #     #pass
-
-        cv2.imshow('Jetson Feed', frame)
+        cv2.imshow('Pi Feed', frame)
 
         if cv2.waitKey(10) & 0xFF == ord('q'):
             cap.release()
             cv2.destroyAllWindows()
-
 
 if __name__ == "__main__":
     main()
