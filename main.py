@@ -182,29 +182,30 @@ def main():
 
         # detection_classes should be ints.
         #detections['class_id'] = detections[0]['class_id'].astype(np.int64)
-        print(detections)
-        #for result in detections:
 
-        #ymin, xmin, ymax, xmax = detections['bounding_box']
-            # xmin = int(max(1, xmin * CAMERA_WIDTH))
-            # xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
-            # ymin = int(max(1, ymin * CAMERA_HEIGHT))
-            # ymax = int(min(CAMERA_HEIGHT, ymax * CAMERA_HEIGHT))
-            #
-            # cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 3)
-            # cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
-            #             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
+        #print(detections)
+        for result in detections:
+
+            ymin, xmin, ymax, xmax = detections['bounding_box']
+            xmin = int(max(1, xmin * CAMERA_WIDTH))
+            xmax = int(min(CAMERA_WIDTH, xmax * CAMERA_WIDTH))
+            ymin = int(max(1, ymin * CAMERA_HEIGHT))
+            ymax = int(min(CAMERA_HEIGHT, ymax * CAMERA_HEIGHT))
+
+            cv2.rectangle(frame, (xmin, ymin), (xmax, ymax), (0, 255, 0), 3)
+            cv2.putText(frame, labels[int(result['class_id'])], (xmin, min(ymax, CAMERA_HEIGHT - 20)),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, cv2.LINE_AA)
 
         # text, region = ocr_it(img, detections, detection_threshold, region_threshold)
         # save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
 
-        img_detect = img.copy()
-        try:
-            text, region = ocr_it(img_detect, detections, detection_threshold, region_threshold)
-            save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
-        except:
-            print(traceback.format_exc())
-            #pass
+        # img_detect = img.copy()
+        # try:
+        #     text, region = ocr_it(img_detect, detections, detection_threshold, region_threshold)
+        #     save_results(text, region, 'realtimeresults.csv', 'Detection_Images')
+        # except:
+        #     print(traceback.format_exc())
+        #     #pass
 
         cv2.imshow('Jetson Feed', frame)
 
