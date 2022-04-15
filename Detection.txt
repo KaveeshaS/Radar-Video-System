@@ -99,8 +99,8 @@ bbox-border-color3=0;1;0;1
 interval=0
 gie-unique-id=1
 nvbuf-memory-type=0
-#model-engine-file=/home/radar/Radar-Video-System/DeepstreamLicenseRecognition/detection/resnet18_trafficcamnet_pruned.etlt_b1_gpu0_fp16.engine
-config-file=/home/radar/Radar-Video-System/DeepstreamLicenseRecognition/configs/config_infer_primary_trafficcamnet.txt
+#model-engine-file=/home/jetson/Radar-Video-System/detection/resnet18_trafficcamnet_pruned.etlt_b1_gpu0_fp16.engine
+config-file=/home/jetson/Radar-Video-System/configs/config_infer_primary_trafficcamnet.txt
 
 [primary-gie]
 enable=1
@@ -111,8 +111,8 @@ bbox-border-color0=0;1;0;1
 interval=0
 gie-unique-id=1
 nvbuf-memory-type=0
-model-engine-file=/home/radar/Radar-Video-System/DeepstreamLicenseRecognition/detection/usa_pruned.etlt_b1_gpu0_fp16.engine
-config-file=/home/radar/Radar-Video-System/DeepstreamLicenseRecognition/configs/config_infer_secondary_lpdnet.txt
+model-engine-file=/home/jetson/Radar-Video-System/detection/usa_pruned.etlt_b1_gpu0_fp16.engine
+config-file=/home/jetson/Radar-Video-System/configs/config_infer_secondary_lpdnet.txt
 
 
 [secondary-gie0]
@@ -123,7 +123,7 @@ batch-size=4
 gie-unique-id=2
 operate-on-gie-id=1
 operate-on-class-ids=0;
-config-file=/home/radar/Radar-Video-System/DeepstreamLicenseRecognition/configs/config_infer_secondary_lpdnet.txt
+config-file=/home/jetson/Radar-Video-System/configs/config_infer_secondary_lpdnet.txt
 
 [secondary-gie0]
 enable=1
@@ -133,14 +133,14 @@ batch-size=4
 gie-unique-id=3
 operate-on-gie-id=1
 operate-on-class-ids=0;
-config-file=/home/radar/Radar-Video-System/DeepstreamLicenseRecognition/configs/config_infer_secondary_lprnet.txt
+config-file=/home/jetson/Radar-Video-System/configs/config_infer_secondary_lprnet.txt
 
 
 [tracker]
 enable=0
 tracker-width=480
 tracker-height=272
-ll-lib-file=/opt/nvidia/deepstream/deepstream-4.0/lib/libnvds_mot_klt.so
+ll-lib-file=/opt/nvidia/deepstream/deepstream-6.0/lib/libnvds_mot_klt.so
 #ll-config-file required for DCF/IOU only
 #ll-config-file=iou_config.txt
 gpu-id=0

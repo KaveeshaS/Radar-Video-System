@@ -49,8 +49,8 @@
 [property]
 gpu-id=0
 #model-engine-file=/models/LP/LPR/us_lprnet_baseline18_deployable.etlt_b16_gpu0_fp16.engine
-labelfile-path=/home/radar/Radar-Video-System/DeepstreamLicenseRecognition/detection/us_lp_characters.txt
-tlt-encoded-model=/home/radar/Radar-Video-System/DeepstreamLicenseRecognition/detection/us_lprnet_baseline18_deployable.etlt
+labelfile-path=/home/jetson/Radar-Video-System/detection/us_lp_characters.txt
+tlt-encoded-model=/home/jetson/Radar-Video-System/detection/us_lprnet_baseline18_deployable.etlt
 tlt-model-key=nvidia_tlt
 batch-size=16
 ## 0=FP32, 1=INT8, 2=FP16 mode
