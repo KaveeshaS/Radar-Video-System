@@ -1,0 +1,156 @@
+# Copyright (c) 2018 NVIDIA Corporation.  All rights reserved.
+#
+# NVIDIA Corporation and its licensors retain all intellectual property
+# and proprietary rights in and to this software, related documentation
+# and any modifications thereto.  Any use, reproduction, disclosure or
+# distribution of this software and related documentation without an express
+# license agreement from NVIDIA Corporation is strictly prohibited.
+
+[application]
+enable-perf-measurement=1
+perf-measurement-interval-sec=5
+#gie-kitti-output-dir=streamscl
+
+[tiled-display]
+enable=0
+rows=1
+columns=1
+width=1280
+height=720
+gpu-id=0
+#(0): nvbuf-mem-default - Default memory allocated, specific to particular platform
+#(1): nvbuf-mem-cuda-pinned - Allocate Pinned/Host cuda memory, applicable for Tesla
+#(2): nvbuf-mem-cuda-device - Allocate Device cuda memory, applicable for Tesla
+#(3): nvbuf-mem-cuda-unified - Allocate Unified cuda memory, applicable for Tesla
+#(4): nvbuf-mem-surface-array - Allocate Surface Array memory, applicable for Jetson
+nvbuf-memory-type=0
+
+[source0]
+enable=1
+#Type - 1=CameraV4L2 2=URI 3=MultiURI 4=RTSP 5=CSI
+type=5
+camera-width=1920
+camera-height=1080
+camera-fps-n=60
+camera-fps-d=1
+#camera-csi-sensor-id=0
+# (0): memtype_device   - Memory type Device
+# (1): memtype_pinned   - Memory type Host Pinned
+# (2): memtype_unified  - Memory type Unified
+cudadec-memtype=0
+
+[sink0]
+enable=1
+#Type - 1=FakeSink 2=EglSink 3=File
+type=2
+sync=1
+source-id=0
+gpu-id=0
+qos=0
+nvbuf-memory-type=0
+overlay-id=1
+
+[sink1]
+enable=1
+type=3
+#1=mp4 2=mkv
+container=1
+#1=h264 2=h265 3=mpeg4
+codec=1
+#encoder type 0=Hardware 1=Software
+enc-type=0
+sync=0
+bitrate=2000000
+#H264 Profile - 0=Baseline 2=Main 4=High
+#H265 Profile - 0=Main 1=Main10
+profile=0
+output-file=recording1_output.mp4
+source-id=0
+
+
+
+
+
+[osd]
+enable=1
+gpu-id=0
+border-width=4
+text-size=15
+text-color=1;1;1;1;
+text-bg-color=0.3;0.3;0.3;1
+font=Arial
+show-clock=0
+clock-x-offset=800
+clock-y-offset=820
+clock-text-size=12
+clock-color=1;0;0;0
+nvbuf-memory-type=0
+
+[streammux]
+gpu-id=0
+##Boolean property to inform muxer that sources are live
+live-source=1
+batch-size=1
+##time out in usec, to wait after the first buffer is available
+##to push the batch even if the complete batch is not formed
+batched-push-timeout=40000
+## Set muxer output width and height
+width=1920
+height=1080
+##Enable to maintain aspect ratio wrt source, and allow black borders, works
+##along with width, height properties
+enable-padding=0
+nvbuf-memory-type=0
+
+# config-file property is mandatory for any gie section.
+# Other properties are optional and if set will override the properties set in
+# the infer config file.
+
+
+[primary-gie]
+enable=1
+gpu-id=0
+batch-size=1
+#Required by the app for OSD, not a plugin property
+bbox-border-color0=0;1;0;1
+interval=4
+gie-unique-id=1
+nvbuf-memory-type=0
+model-engine-file=/home/jetson/Radar-Video-System/detection/resnet18_trafficcamnet_pruned.etlt_b1_gpu0_fp16.engine
+config-file=/home/jetson/Radar-Video-System/configs/config_infer_primary_trafficcamnet.txt
+
+[secondary-gie0]
+enable=1
+model-engine-file=/home/jetson/Radar-Video-System/detection/usa_pruned.etlt_b1_gpu0_fp16.engine
+gpu-id=0
+batch-size=1
+gie-unique-id=2
+operate-on-gie-id=1
+operate-on-class-ids=0;
+config-file=/home/jetson/Radar-Video-System/configs/config_infer_secondary_lpdnet.txt
+
+[secondary-gie1]
+enable=1
+model-engine-file=/home/jetson/Radar-Video-System/detection/lpr_us_onnx_b16.engine
+gpu-id=0
+batch-size=1
+gie-unique-id=3
+operate-on-gie-id=2
+operate-on-class-ids=0;
+config-file=/home/jetson/Radar-Video-System/configs/config_infer_secondary_lprnet.txt
+
+
+[tracker]
+enable=1
+tracker-width=480
+tracker-height=256
+ll-lib-file=/home/jetson/Radar-Video-System/detection/libnvds_nvmultiobjecttracker.so
+#ll-config-file required for DCF/IOU only
+ll-config-file=/home/jetson/Radar-Video-System/configs/config_tracker_NvDCF_max_perf.yml
+enable-batch-process=1
+
+gpu-id=0
+
+[tests]
+file-loop=1
+
